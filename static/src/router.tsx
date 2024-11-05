@@ -1,17 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import App from "./App"
-import OrdersPage from "./orders"
+import ResponsibilitesPage from "./ress"
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <ResponsibilitesPage />,
     //loader: rootLoader,
-  },
-  {
-    path: "orders",
-    element: <OrdersPage />,
   },
 ])
 
