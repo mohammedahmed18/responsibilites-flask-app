@@ -1,6 +1,6 @@
 from models import User, Responsibility, db
 from flask import jsonify, request
-from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url
+from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_today_res_url
 import datetime
 
 
@@ -16,6 +16,18 @@ def register_responsibilities_routes(app):
     def getAllRes():
         responsibilities = Responsibility.query.all()
         return jsonify([r.serialize for r in responsibilities])
+
+    @app.route(get_today_res_url, strict_slashes=False)
+    def getTodayRes():
+        today_res = Responsibility.query.filter_by(
+            date=datetime.date.today()).first()
+        if not today_res:
+            # parse date to python date object
+            today_res = Responsibility(date=datetime.date.today())
+            db.session.add(today_res)
+            db.session.commit()
+
+        return today_res.serialize
 
     @app.route(get_res_by_id_url, strict_slashes=False)
     def getResById(res_id):
