@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
+import { api } from '../api/api';
 
 type CommitmentFormProps = {
-  onSubmit: (formData: CommitmentFormData) => void;
   initialData?: CommitmentFormData;
+  allUsers: { id: number, name: string, rotba: string }[]
+  parentCommitmentId: number
 };
 
 type CommitmentFormData = {
+  id?: number;
   details: string;
-  notes: string;
+  notes?: string;
   type: 'conference' | 'letter';
   users: string[];
 };
 
-const CommitmentForm: React.FC<CommitmentFormProps> = ({ onSubmit, initialData }) => {
+const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, parentCommitmentId }) => {
+  const [loading, setLoading] = useState(false)
   const [details, setDetails] = useState(initialData?.details || '');
   const [notes, setNotes] = useState(initialData?.notes || '');
   const [type, setType] = useState<'conference' | 'letter'>(initialData?.type || 'conference');
   const [users, setUsers] = useState<string[]>(initialData?.users || []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const isEdit = !!initialData?.id
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData: CommitmentFormData = {
       details,
@@ -26,9 +31,15 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ onSubmit, initialData }
       type,
       users,
     };
-    console.log({formData});
-    
-    onSubmit(formData);
+    if (!isEdit) {
+      try {
+        setLoading(true)
+        await api.post("/res-item", { ...formData, responsibility_id: parentCommitmentId })
+      } finally {
+        setLoading(false)
+      }
+    }
+
   };
 
   const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -109,11 +120,11 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ onSubmit, initialData }
             onChange={handleUserChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
-            {/* Example users - Replace with actual user data */}
-            <option value="1">User 1</option>
-            <option value="2">User 2</option>
-            <option value="3">User 3</option>
-            <option value="4">User 4</option>
+            {
+              allUsers.map(u => (
+                <option key={u.id} value={u.id}>{u.rotba + "\/" + u.name} </option>
+              ))
+            }
           </select>
         </div>
 
@@ -122,8 +133,9 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ onSubmit, initialData }
           <button
             type="submit"
             className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading}
           >
-            Submit Commitment
+            {isEdit ? "Edit Commitment" : "Submit Commitment"}
           </button>
         </div>
       </form>

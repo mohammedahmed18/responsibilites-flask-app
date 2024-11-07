@@ -16,7 +16,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled = false,
 }) => {
   // TailwindCSS classes for different button variants
-  const baseClasses = 'font-semibold text-white py-2 px-4 rounded transition duration-300 ease-in-out focus:outline-none';
+  const baseClasses = 'font-semibold text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none';
   const colorClasses = {
     blue: 'bg-blue-500 hover:bg-blue-700',
     green: 'bg-green-500 hover:bg-green-700',
