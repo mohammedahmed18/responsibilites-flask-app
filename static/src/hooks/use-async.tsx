@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, DependencyList } from "react"
 
-export default function useAsync(callback: () => Promise<any>, dependencies = []) {
+export default function useAsync(callback: () => Promise<any>, dependencies: DependencyList) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const [value, setValue] = useState()
@@ -13,7 +13,7 @@ export default function useAsync(callback: () => Promise<any>, dependencies = []
       .then(setValue)
       .catch(setError)
       .finally(() => setLoading(false))
-  }, dependencies)
+  }, dependencies || [])
 
   useEffect(() => {
     callbackMemoized()

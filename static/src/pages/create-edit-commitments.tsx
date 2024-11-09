@@ -6,27 +6,34 @@ import dayjs from "dayjs"
 import { RessItem } from "../components/ressTable"
 import CustomButton from "../components/CustomButton"
 import { useState } from "react"
+import { useParams } from "react-router-dom"
 
+const CommitmentCounter = ({ num }: { num: number }) => {
+  return (
+    <span className="font-bold block text-center bg-indigo-600 text-white rounded-2xl mx-auto w-fit px-10">{num}</span>
+  )
+}
 const CreateAndEditCommitment = () => {
   const [creatingCommitment, setCreatingCommitment] = useState(false)
+  const { date } = useParams()
   const { loading, value } = useAsync(() => {
-    return api.get("/res/today")
+    return api.get("/res/" + dayjs(date).format("YYYY-MM-DD"))
   }, [])
   const { value: usersRes } = useAsync(() => {
     return api.get("/users")
   }, [])
   const todayCommitment = value ? (value as AxiosResponse).data : null
   return (
-    <div className="container mx-auto py-5">
+    <div className="container mx-auto py-5 px-4">
       {loading ? "Loading..." : (
         <>
           <div className="border-b pb-4 mb-6">
             <h2 className="text-2xl font-semibold text-gray-800">{dayjs(todayCommitment.date).format("YYYY-MM-DD")}</h2>
           </div>
 
-          {todayCommitment.items.map((i: RessItem, idx: number) => (
+          {todayCommitment?.items?.map((i: RessItem, idx: number) => (
             <div key={i.id} className="mb-5">
-              <span>{idx + 1}</span>
+              <CommitmentCounter num={idx + 1} />
               <CommitmentForm
                 parentCommitmentId={todayCommitment.id}
                 allUsers={usersRes ? ((usersRes as AxiosResponse).data) : []}
@@ -41,12 +48,12 @@ const CreateAndEditCommitment = () => {
             </div>
           ))}
           {creatingCommitment && <>
-            <span>{todayCommitment.items.length + 1}</span>
+            <CommitmentCounter num={todayCommitment.items.length + 1} />
             <CommitmentForm
               parentCommitmentId={todayCommitment.id}
               allUsers={usersRes ? ((usersRes as AxiosResponse).data) : []}
               initialData={{
-                type: "letter",
+                type: "LETTER",
                 notes: "",
                 details: "",
                 users: []

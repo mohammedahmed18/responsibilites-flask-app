@@ -11,7 +11,7 @@ type CommitmentFormData = {
   id?: number;
   details: string;
   notes?: string;
-  type: 'conference' | 'letter';
+  type: 'CONFERENCE' | 'LETTER';
   users: string[];
 };
 
@@ -19,7 +19,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
   const [loading, setLoading] = useState(false)
   const [details, setDetails] = useState(initialData?.details || '');
   const [notes, setNotes] = useState(initialData?.notes || '');
-  const [type, setType] = useState<'conference' | 'letter'>(initialData?.type || 'conference');
+  const [type, setType] = useState<'CONFERENCE' | 'LETTER'>(initialData?.type || 'CONFERENCE');
   const [users, setUsers] = useState<string[]>(initialData?.users || []);
 
   const isEdit = !!initialData?.id
@@ -31,13 +31,17 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
       type,
       users,
     };
-    if (!isEdit) {
-      try {
-        setLoading(true)
+
+    try {
+      setLoading(true)
+      if (isEdit) {
+        await api.put("/res-item", { ...formData, responsibility_id: parentCommitmentId, id: initialData.id })
+      } else {
         await api.post("/res-item", { ...formData, responsibility_id: parentCommitmentId })
-      } finally {
-        setLoading(false)
       }
+      window.location.reload()
+    } finally {
+      setLoading(false)
     }
 
   };
@@ -88,30 +92,30 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
               <input
                 type="radio"
                 name="type"
-                value="conference"
-                checked={type === 'conference'}
-                onChange={() => setType('conference')}
+                value="CONFERENCE"
+                checked={type === 'CONFERENCE'}
+                onChange={() => setType('CONFERENCE')}
                 className="form-radio text-indigo-600"
               />
-              <span className="ml-2 text-gray-800">Conference</span>
+              <span className="ml-2 text-gray-800">CONFERENCE</span>
             </label>
             <label className="inline-flex items-center">
               <input
                 type="radio"
                 name="type"
-                value="letter"
-                checked={type === 'letter'}
-                onChange={() => setType('letter')}
+                value="LETTER"
+                checked={type === 'LETTER'}
+                onChange={() => setType('LETTER')}
                 className="form-radio text-indigo-600"
               />
-              <span className="ml-2 text-gray-800">Letter</span>
+              <span className="ml-2 text-gray-800">LETTER</span>
             </label>
           </div>
         </div>
 
         {/* Users */}
         <div className="mb-6">
-          <label htmlFor="users" className="block text-sm font-medium text-gray-700">Select Users</label>
+          <label htmlFor="users" className="block text-sm font-medium text-gray-700">Select associated people</label>
           <select
             id="users"
             name="users"

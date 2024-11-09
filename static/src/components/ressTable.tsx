@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import CustomButton from "./CustomButton"
+import { Link } from "react-router-dom";
 
 export type RessData = {
   date: string,
@@ -10,7 +12,7 @@ export type RessItem = {
   id: number,
   details: string,
   notes?: string,
-  type: "conference" | "letter",
+  type: "CONFERENCE" | "LETTER",
   users: { id: number, name: string, rotba: string }[]
 }
 
@@ -24,23 +26,36 @@ const RessTable = ({ data }: { data: RessData[] }) => {
           <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Details</th>
           <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Notes</th>
           <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Assigned Users</th>
+          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700"></th>
         </tr>
       </thead>
       <tbody>
         {data.map((event) => (
-          event.items.map((item) => (
-            <tr key={item.id} className="border-t">
-              <td className="py-2 px-4 text-sm text-gray-600">{dayjs(event.date).format("YYYY/MM/DD")}</td>
-              <td className="py-2 px-4 text-sm text-gray-600">{item.type}</td>
-              <td className="py-2 px-4 text-sm text-gray-600">{item.details}</td>
-              <td className="py-2 px-4 text-sm text-gray-600">{item.notes}</td>
-              <td className="py-2 px-4 text-sm text-gray-600">
-                {item.users.map((u => (
-                  <span className="block">{u.rotba + "\/" + u.name}</span>
-                )))}
-              </td>
-            </tr>
-          ))
+          event.items.map((item) => {
+            const formattedDate = dayjs(event.date).format("YYYY-MM-DD")
+            return (
+              <tr key={item.id} className="border-t">
+                <td className="py-2 px-4 text-sm text-gray-600">
+                  <Link to={`/commitments/{formattedDate}`}>
+                    {formattedDate}
+                  </Link>
+                </td>
+                <td className="py-2 px-4 text-sm text-gray-600">{item.type}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{item.details}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{item.notes}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">
+                  {item.users.map((u => (
+                    <span className="block">{u.rotba + "\/" + u.name}</span>
+                  )))}
+                </td>
+                <td className="py-2 px-4 text-sm text-gray-600">
+                  <Link to={`/edit-commitment-item/${item.id}`}>
+                    <CustomButton label="edit" onClick={() => { }} />
+                  </Link>
+                </td>
+              </tr>
+            )
+          })
         ))}
       </tbody>
     </table>

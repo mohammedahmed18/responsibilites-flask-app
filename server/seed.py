@@ -6,6 +6,7 @@ from server import app
 # List of users to add
 users_to_add = [
     {'name': "mohammed ahmed", 'rotba': "gondy"},
+    {'name': "GAD", 'rotba': "gondy"},
 ]
 
 with app.app_context():

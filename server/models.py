@@ -65,7 +65,7 @@ class ResponsibilityItem(db.Model):
             'id': self.id,
             'details': self.details,
             'responsibility_id': self.responsibility_id,
-            'type': self.type.value,
+            'type': self.type.name,
             'notes': self.notes,
             'users': [a.user.serialize for a in self.associated_users]
         }

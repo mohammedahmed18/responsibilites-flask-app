@@ -3,6 +3,7 @@ import { api } from "./api/api"
 import CustomButton from "./components/CustomButton"
 import RessTable from "./components/ressTable"
 import useAsync from "./hooks/use-async"
+import dayjs from "dayjs"
 
 const ResponsibilitesPage = () => {
   const { loading, value: responsibilitesRes } = useAsync(() => {
@@ -10,16 +11,14 @@ const ResponsibilitesPage = () => {
   }, [])
   const ress = responsibilitesRes ? responsibilitesRes?.data : []
   return (
-    <div className="">
+    <div className="container mx-auto py-5 px-4">
       {loading && <span>Loading.....</span>}
-      <div className="container mx-auto my-5">
-        <div className="mb-3">
-          <Link to="/create-commitment">
-            <CustomButton label="create today commitments" onClick={() => { }} />
-          </Link>
-        </div>
-        <RessTable data={ress} />
+      <div className="mb-3">
+        <Link to={"/create-commitments/" + dayjs().add(1, "day").format("YYYY-MM-DD")}>
+          <CustomButton label="create tomorrow commitments" onClick={() => { }} />
+        </Link>
       </div>
+      <RessTable data={ress} />
     </div>
 
   )

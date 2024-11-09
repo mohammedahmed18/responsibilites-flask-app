@@ -1,6 +1,6 @@
 from models import User, Responsibility, db, ResponsibilityItem, ResponsibilityUser
 from flask import jsonify, request
-from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_today_res_url, create_new_res_item_url
+from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_tomorrow_res_url, create_new_res_item_url, get_commitment_item_by_id_url, get_res_by_date_url
 import datetime
 from sqlalchemy import desc
 
@@ -15,21 +15,35 @@ def register_users_routes(app):
 def register_responsibilities_routes(app):
     @app.route(get_all_res_url, strict_slashes=False)
     def getAllRes():
-        responsibilities = Responsibility.query.all()
+        responsibilities = Responsibility.query.order_by(
+            desc(Responsibility.date))
         return jsonify([r.serialize for r in responsibilities])
 
-    @app.route(get_today_res_url, strict_slashes=False)
-    def getTodayRes():
-        # today_res = Responsibility.query.filter_by(
-        #     date=datetime.date.today()).first()
-        today_res = Responsibility.query.first()
-        if not today_res:
+    @app.route(get_tomorrow_res_url, strict_slashes=False)
+    def getTomorrow():
+        # db.session.query(Responsibility).delete()
+        tomorrow_date_time = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrow_commitment = Responsibility.query.filter_by(
+            date=tomorrow_date_time).first()
+        if not tomorrow_commitment:
             # parse date to python date object
-            today_res = Responsibility(date=datetime.date.today())
-            db.session.add(today_res)
+            tomorrow_commitment = Responsibility(date=tomorrow_date_time)
+            db.session.add(tomorrow_commitment)
             db.session.commit()
 
-        return today_res.serialize
+        return tomorrow_commitment.serialize
+
+    @app.route(get_res_by_date_url, strict_slashes=False)
+    def getCommitmentByDate(date):
+        # db.session.query(Responsibility).delete()
+        date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+        commitment = Responsibility.query.filter_by(date=date_obj).first()
+        if not commitment:
+            # parse date to python date object
+            commitment = Responsibility(date=date_obj)
+            db.session.add(commitment)
+            db.session.commit()
+        return commitment.serialize
 
     @app.route(get_res_by_id_url, strict_slashes=False)
     def getResById(res_id):
@@ -37,6 +51,14 @@ def register_responsibilities_routes(app):
         if not existing_res:
             return jsonify(success=False, message="record can't be found")
         return existing_res.serialize
+
+    @app.route(get_commitment_item_by_id_url, strict_slashes=False)
+    def getCommitmentItemById(res_item_id):
+        commitment_item = ResponsibilityItem.query.filter_by(
+            id=int(res_item_id)).first()
+        if not commitment_item:
+            return jsonify(message="no records found"), 404
+        return commitment_item.serialize
 
     @app.route(create_new_res_url, strict_slashes=False, methods=["POST"])
     def createNewRes():
@@ -48,29 +70,45 @@ def register_responsibilities_routes(app):
         db.session.commit()
         return jsonify(newRes.serialize)
 
-    @app.route(create_new_res_item_url, strict_slashes=False, methods=["POST"])
+    @app.route(create_new_res_item_url, strict_slashes=False, methods=["POST", "PUT"])
     def createNewResItem():
         data = request.get_json(force=True)
         usersIds = data['users']
         del data['users']
-        newRes = ResponsibilityItem(
-            type=data['type'],
-            responsibility_id=data['responsibility_id'],
-            notes=data['notes'],
-            details=data['details'],
-        )
-        db.session.add(newRes)
-        db.session.commit()
-        # create associated users
-        for id in usersIds:
-            resUser = ResponsibilityUser(
-                responsibility_id=newRes.id, user_id=id)
-            db.session.add(resUser)
-        db.session.commit()
-        return jsonify(newRes.serialize)
+        if request.method == "POST":
+            newRes = ResponsibilityItem(
+                type=data['type'],
+                responsibility_id=data['responsibility_id'],
+                notes=data['notes'],
+                details=data['details'],
+            )
+            db.session.add(newRes)
+            db.session.commit()
+            create_associated_users(usersIds, newRes.id)
+            return jsonify(newRes.serialize)
+        if request.method == "PUT":
+            item_id = data['id']
+            del data['id']
+            del data['responsibility_id']
+            ResponsibilityItem.query.filter_by(
+                id=item_id).update(dict(data))
+            db.session.commit()
+            # update users
+            db.session.query(ResponsibilityUser).filter_by(
+                responsibility_id=item_id).delete()
+            create_associated_users(usersIds, item_id)
+            return jsonify(None)
 
     @app.route(delete_a_res_url, strict_slashes=False, methods=["DELETE"])
     def deleteRes(res_id):
         db.session.query(Responsibility).filter_by(id=int(res_id)).delete()
         db.session.commit()
         return "ok"
+
+    def create_associated_users(user_ids, commitment_item_id):
+        # create associated users
+        for id in user_ids:
+            resUser = ResponsibilityUser(
+                responsibility_id=commitment_item_id, user_id=id)
+            db.session.add(resUser)
+        db.session.commit()
