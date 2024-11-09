@@ -21,12 +21,12 @@ const RessTable = ({ data }: { data: RessData[] }) => {
     <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
       <thead className="bg-gray-100">
         <tr>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Date</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Type</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Details</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Notes</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Assigned Users</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700"></th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">التاريخ</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">النوع</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">التفاصيل</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الملاحظات</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الأفراد المعينين</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
         </tr>
       </thead>
       <tbody>

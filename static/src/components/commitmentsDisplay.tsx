@@ -11,9 +11,9 @@ const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
                     <table className="bg-white border border-gray-300 rounded-lg shadow-lg my-4">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700"></th>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Rotba</th>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Name</th>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الدرجة</th>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الإسم</th>
                             </tr>
                         </thead>
                         <tbody>
