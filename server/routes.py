@@ -11,12 +11,18 @@ def register_users_routes(app):
         users = User.query.order_by(desc(User.rotba))
         return jsonify([u.serialize for u in users])
 
-
+def get_date_object_from_str(date):
+    date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    return date_obj 
 def register_responsibilities_routes(app):
     @app.route(get_all_res_url, strict_slashes=False)
     def getAllRes():
-        responsibilities = Responsibility.query.order_by(
-            desc(Responsibility.date))
+        date = request.args.get('date')
+        date_obj = None
+        responsibilities = Responsibility.query.order_by(desc(Responsibility.date))
+        if date != "":
+            date_obj = get_date_object_from_str(date)
+            responsibilities = responsibilities.filter_by(date=date_obj)
         return jsonify([r.serialize for r in responsibilities])
 
     @app.route(get_tomorrow_res_url, strict_slashes=False)

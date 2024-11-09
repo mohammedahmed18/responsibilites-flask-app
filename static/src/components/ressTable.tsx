@@ -36,7 +36,7 @@ const RessTable = ({ data }: { data: RessData[] }) => {
             return (
               <tr key={item.id} className="border-t">
                 <td className="py-2 px-4 text-sm text-gray-600">
-                  <Link to={`/commitments/{formattedDate}`}>
+                  <Link to={`/commitments/${formattedDate}`} className="underline hover:text-blue-600">
                     {formattedDate}
                   </Link>
                 </td>

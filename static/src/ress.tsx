@@ -1,28 +1,65 @@
-import { Link } from "react-router-dom"
-import { api } from "./api/api"
-import CustomButton from "./components/CustomButton"
-import RessTable from "./components/ressTable"
-import useAsync from "./hooks/use-async"
-import dayjs from "dayjs"
+import { Link } from "react-router-dom";
+import { api } from "./api/api";
+import CustomButton from "./components/CustomButton";
+import RessTable from "./components/ressTable";
+import useAsync from "./hooks/use-async";
+import dayjs from "dayjs";
+import { AxiosResponse } from "axios";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Layout from "./components/layout";
 
 const ResponsibilitesPage = () => {
+  const [date, setDate] = useState<string>();
   const { loading, value: responsibilitesRes } = useAsync(() => {
-    return api.get("/res/all")
-  }, [])
-  const ress = responsibilitesRes ? responsibilitesRes?.data : []
+    return api.get(`/res/all?date=${date || ""}`);
+  }, [date]); // Re-fetch when the date changes
+
+  const ress = responsibilitesRes ? (responsibilitesRes as AxiosResponse).data : [];
+
+  // Function to handle the date change
+  const handleDateChange = (date: Date | null) => {
+    setDate(dayjs(date).format("YYYY-MM-DD"));
+  };
+
+  const handleClearDate = () => {
+    setDate(undefined);
+  };
+
   return (
-    <div className="container mx-auto py-5 px-4">
-      {loading && <span>Loading.....</span>}
-      <div className="mb-3">
-        <Link to={"/create-commitments/" + dayjs().add(1, "day").format("YYYY-MM-DD")}>
-          <CustomButton label="create tomorrow commitments" onClick={() => { }} />
-        </Link>
+    <Layout>
+      <div className="container mx-auto py-5 px-4">
+        {loading && <span>Loading...</span>}
+
+        <div className="mb-6 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <label htmlFor="datePicker" className="text-lg font-semibold text-gray-700">Select Date:</label>
+            <DatePicker
+              selected={date ? dayjs(date).toDate() : null}
+              onChange={handleDateChange}
+              dateFormat="yyyy-MM-dd"
+              className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {/* Clear Button */}
+            <button
+              type="button"
+              onClick={handleClearDate}
+              className="p-2 ml-3 bg-gray-200 rounded-md shadow-sm hover:bg-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Clear
+            </button>
+          </div>
+
+          <Link to={"/create-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
+            <CustomButton label={`Create ${date ? date : "Tomorrow's"} Commitments`} onClick={() => { }} />
+          </Link>
+        </div>
+
+        <RessTable data={ress} />
       </div>
-      <RessTable data={ress} />
-    </div>
+    </Layout>
+  );
+};
 
-  )
-}
-
-
-export default ResponsibilitesPage
+export default ResponsibilitesPage;

@@ -3,6 +3,7 @@ import useAsync from '../hooks/use-async'
 import { api } from '../api/api'
 import { AxiosResponse } from "axios"
 import CommitmentForm from '../components/CommitmentItemForm'
+import Layout from '../components/layout'
 const EditCommitmentItemPage = () => {
   const params = useParams()
   const commitmentId = params.id || ""
@@ -15,17 +16,19 @@ const EditCommitmentItemPage = () => {
   const allUsers = usersRes ? ((usersRes as AxiosResponse).data) : []
   const commitmentItem = value ? (value as AxiosResponse)?.data : null
   return (
-    <div>
-      {loading && <span>Loading....</span>}
-      {commitmentItem && <CommitmentForm
-        initialData={{
-          ...commitmentItem,
-          users: commitmentItem.users.map((u:any) => u.id.toString())
-        }}
-      parentCommitmentId={commitmentItem.responsibility_id}
-      allUsers={allUsers}
-      />}
-    </div>
+    <Layout>
+      <div>
+        {loading && <span>Loading....</span>}
+        {commitmentItem && <CommitmentForm
+          initialData={{
+            ...commitmentItem,
+            users: commitmentItem.users.map((u: any) => u.id.toString())
+          }}
+          parentCommitmentId={commitmentItem.responsibility_id}
+          allUsers={allUsers}
+        />}
+      </div>
+    </Layout>
   )
 }
 export default EditCommitmentItemPage

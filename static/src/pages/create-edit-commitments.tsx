@@ -7,6 +7,7 @@ import { RessItem } from "../components/ressTable"
 import CustomButton from "../components/CustomButton"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
+import Layout from "../components/layout"
 
 const CommitmentCounter = ({ num }: { num: number }) => {
   return (
@@ -24,51 +25,53 @@ const CreateAndEditCommitment = () => {
   }, [])
   const todayCommitment = value ? (value as AxiosResponse).data : null
   return (
-    <div className="container mx-auto py-5 px-4">
-      {loading ? "Loading..." : (
-        <>
-          <div className="border-b pb-4 mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800">{dayjs(todayCommitment.date).format("YYYY-MM-DD")}</h2>
-          </div>
+    <Layout>
+      <div className="container mx-auto py-5 px-4">
+        {loading ? "Loading..." : (
+          <>
+            <div className="border-b pb-4 mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800">{dayjs(todayCommitment.date).format("YYYY-MM-DD")}</h2>
+            </div>
 
-          {todayCommitment?.items?.map((i: RessItem, idx: number) => (
-            <div key={i.id} className="mb-5">
-              <CommitmentCounter num={idx + 1} />
+            {todayCommitment?.items?.map((i: RessItem, idx: number) => (
+              <div key={i.id} className="mb-5">
+                <CommitmentCounter num={idx + 1} />
+                <CommitmentForm
+                  parentCommitmentId={todayCommitment.id}
+                  allUsers={usersRes ? ((usersRes as AxiosResponse).data) : []}
+                  initialData={{
+                    id: i.id,
+                    type: i.type,
+                    notes: i.notes,
+                    details: i.details,
+                    users: i.users.map(i => i.id.toString())
+                  }}
+                />
+              </div>
+            ))}
+            {creatingCommitment && <>
+              <CommitmentCounter num={todayCommitment.items.length + 1} />
               <CommitmentForm
                 parentCommitmentId={todayCommitment.id}
                 allUsers={usersRes ? ((usersRes as AxiosResponse).data) : []}
                 initialData={{
-                  id: i.id,
-                  type: i.type,
-                  notes: i.notes,
-                  details: i.details,
-                  users: i.users.map(i => i.id.toString())
+                  type: "LETTER",
+                  notes: "",
+                  details: "",
+                  users: []
                 }}
               />
-            </div>
-          ))}
-          {creatingCommitment && <>
-            <CommitmentCounter num={todayCommitment.items.length + 1} />
-            <CommitmentForm
-              parentCommitmentId={todayCommitment.id}
-              allUsers={usersRes ? ((usersRes as AxiosResponse).data) : []}
-              initialData={{
-                type: "LETTER",
-                notes: "",
-                details: "",
-                users: []
-              }}
-            />
-          </>
+            </>
 
-          }
-          <div className="my-4">
-            <CustomButton label="add a new commitment" onClick={() => setCreatingCommitment(true)} color="green" disabled={creatingCommitment} />
-          </div>
-        </>
-      )
-      }
-    </div >
+            }
+            <div className="my-4">
+              <CustomButton label="add a new commitment" onClick={() => setCreatingCommitment(true)} color="green" disabled={creatingCommitment} />
+            </div>
+          </>
+        )
+        }
+      </div>
+    </Layout>
   )
 }
 
