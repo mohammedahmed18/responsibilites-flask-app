@@ -9,12 +9,17 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Layout from "./components/layout";
+import CommitmentDisplay from "./components/commitmentsDisplay";
 
 const ResponsibilitesPage = () => {
   const [date, setDate] = useState<string>();
   const { loading, value: responsibilitesRes } = useAsync(() => {
     return api.get(`/res/all?date=${date || ""}`);
-  }, [date]); // Re-fetch when the date changes
+  }, [date]);
+
+  const { value: todayCommitmentResponse } = useAsync(() => {
+    return api.get(`/res/${dayjs().format("YYYY-MM-DD")}`);
+  }, []);
 
   const ress = responsibilitesRes ? (responsibilitesRes as AxiosResponse).data : [];
 
@@ -27,11 +32,17 @@ const ResponsibilitesPage = () => {
     setDate(undefined);
   };
 
+  const todayCommitment = todayCommitmentResponse ? (todayCommitmentResponse as AxiosResponse).data : null
+  console.log(todayCommitment);
+  
   return (
     <Layout>
       <div className="container mx-auto py-5 px-4">
         {loading && <span>Loading...</span>}
-
+        <div className="my-6 p-5 shadow-lg border rounded-lg">
+          <h2 className="text-center font-bold underline">Today's commitments</h2>
+        {todayCommitment && <CommitmentDisplay commitment={todayCommitment} />}
+        </div>
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <label htmlFor="datePicker" className="text-lg font-semibold text-gray-700">Select Date:</label>
@@ -51,7 +62,7 @@ const ResponsibilitesPage = () => {
             </button>
           </div>
 
-          <Link to={"/create-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
+          <Link to={"/manage-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
             <CustomButton label={`Create ${date ? date : "Tomorrow's"} Commitments`} onClick={() => { }} />
           </Link>
         </div>

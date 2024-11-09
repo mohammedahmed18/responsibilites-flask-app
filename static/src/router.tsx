@@ -9,10 +9,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <ResponsibilitesPage />,
-    //loader: rootLoader,
   },
   {
-    path: "/create-commitments/:date",
+    path: "/manage-commitments/:date",
     element: <CreateAndEditCommitment />,
   },
   {
