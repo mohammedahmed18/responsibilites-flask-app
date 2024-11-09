@@ -11,6 +11,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Layout from "./components/layout";
 import CommitmentDisplay from "./components/commitmentsDisplay";
 
+export const getLocalizedType = (type: string) => {
+  const typeNonCase = type.toLowerCase()
+  if (typeNonCase == "letter") return "جواب"
+  else if (typeNonCase == "conference") return "مؤتمر"
+  return ""
+}
 const ResponsibilitesPage = () => {
   const [date, setDate] = useState<string>();
   const { loading, value: responsibilitesRes } = useAsync(() => {
@@ -33,15 +39,14 @@ const ResponsibilitesPage = () => {
   };
 
   const todayCommitment = todayCommitmentResponse ? (todayCommitmentResponse as AxiosResponse).data : null
-  console.log(todayCommitment);
-  
+
   return (
     <Layout>
       <div className="container mx-auto py-5 px-4">
         {loading && <span>Loading...</span>}
         <div className="my-6 p-5 shadow-lg border rounded-lg">
-          <h2 className="text-center font-bold text-2xl">إلتزامات الوحدة اليوم</h2>
-        {todayCommitment && <CommitmentDisplay commitment={todayCommitment} />}
+          <h2 className="text-center font-bold text-2xl">إلتزامات اليوم</h2>
+          {todayCommitment && <CommitmentDisplay commitment={todayCommitment} />}
         </div>
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">

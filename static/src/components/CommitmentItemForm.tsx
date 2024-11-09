@@ -66,7 +66,6 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-            placeholder="Enter details about the commitment..."
           />
         </div>
 
@@ -80,7 +79,6 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-            placeholder="Add any additional notes..."
           />
         </div>
 

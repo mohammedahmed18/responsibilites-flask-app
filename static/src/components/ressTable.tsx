@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import CustomButton from "./CustomButton"
 import { Link } from "react-router-dom";
+import { getLocalizedType } from "../ress";
 
 export type RessData = {
   date: string,
@@ -14,6 +15,11 @@ export type RessItem = {
   notes?: string,
   type: "CONFERENCE" | "LETTER",
   users: { id: number, name: string, rotba: string }[]
+}
+
+function truncate(str?: string, max: number) {
+  if (!str) return ""
+  return str.length > max ? str.substring(0, max-1) + '…' : str;
 }
 
 const RessTable = ({ data }: { data: RessData[] }) => {
@@ -40,9 +46,9 @@ const RessTable = ({ data }: { data: RessData[] }) => {
                     {formattedDate}
                   </Link>
                 </td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.type}</td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.details}</td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.notes}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{getLocalizedType(item.type)}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{truncate(item.details, 200)}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{truncate(item.notes, 200)}</td>
                 <td className="py-2 px-4 text-sm text-gray-600">
                   {item.users.map((u => (
                     <span className="block">{u.rotba + "\/" + u.name}</span>
@@ -50,7 +56,7 @@ const RessTable = ({ data }: { data: RessData[] }) => {
                 </td>
                 <td className="py-2 px-4 text-sm text-gray-600">
                   <Link to={`/edit-commitment-item/${item.id}`}>
-                    <CustomButton label="edit" onClick={() => { }} />
+                    <CustomButton label="تعديل" onClick={() => { }} />
                   </Link>
                 </td>
               </tr>
