@@ -21,10 +21,14 @@
     src: url("assets/fonts/Tajawal-Bold.ttf") format("ttf");
     font-weight: 700;
 }
-body,html {
-    font-family: "Tajawal";
+
+* {
+    font-family: "Tajawal" !important;
 }
 
-td,th,tr{
+td,
+th,
+tr,
+textarea {
     direction: rtl !important;
 }
