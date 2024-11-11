@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import CustomButton from "./CustomButton"
 import { Link } from "react-router-dom";
+import { getLocalizedType } from "../ress";
 
 export type RessData = {
   date: string,
@@ -16,17 +17,22 @@ export type RessItem = {
   users: { id: number, name: string, rotba: string }[]
 }
 
+function truncate(str?: string, max: number) {
+  if (!str) return ""
+  return str.length > max ? str.substring(0, max-1) + '…' : str;
+}
+
 const RessTable = ({ data }: { data: RessData[] }) => {
   return (
     <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
       <thead className="bg-gray-100">
         <tr>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Date</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Type</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Details</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Notes</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Assigned Users</th>
-          <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700"></th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">التاريخ</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">النوع</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">التفاصيل</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الملاحظات</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الأفراد المعينين</th>
+          <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
         </tr>
       </thead>
       <tbody>
@@ -40,9 +46,9 @@ const RessTable = ({ data }: { data: RessData[] }) => {
                     {formattedDate}
                   </Link>
                 </td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.type}</td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.details}</td>
-                <td className="py-2 px-4 text-sm text-gray-600">{item.notes}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{getLocalizedType(item.type)}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{truncate(item.details, 200)}</td>
+                <td className="py-2 px-4 text-sm text-gray-600">{truncate(item.notes, 200)}</td>
                 <td className="py-2 px-4 text-sm text-gray-600">
                   {item.users.map((u => (
                     <span className="block">{u.rotba + "\/" + u.name}</span>
@@ -50,7 +56,7 @@ const RessTable = ({ data }: { data: RessData[] }) => {
                 </td>
                 <td className="py-2 px-4 text-sm text-gray-600">
                   <Link to={`/edit-commitment-item/${item.id}`}>
-                    <CustomButton label="edit" onClick={() => { }} />
+                    <CustomButton label="تعديل" onClick={() => { }} />
                   </Link>
                 </td>
               </tr>

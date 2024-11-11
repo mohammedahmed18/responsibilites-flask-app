@@ -11,6 +11,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Layout from "./components/layout";
 import CommitmentDisplay from "./components/commitmentsDisplay";
 
+export const getLocalizedType = (type: string) => {
+  const typeNonCase = type.toLowerCase()
+  if (typeNonCase == "letter") return "جواب"
+  else if (typeNonCase == "conference") return "مؤتمر"
+  return ""
+}
 const ResponsibilitesPage = () => {
   const [date, setDate] = useState<string>();
   const { loading, value: responsibilitesRes } = useAsync(() => {
@@ -33,19 +39,18 @@ const ResponsibilitesPage = () => {
   };
 
   const todayCommitment = todayCommitmentResponse ? (todayCommitmentResponse as AxiosResponse).data : null
-  console.log(todayCommitment);
-  
+
   return (
     <Layout>
       <div className="container mx-auto py-5 px-4">
         {loading && <span>Loading...</span>}
         <div className="my-6 p-5 shadow-lg border rounded-lg">
-          <h2 className="text-center font-bold underline">Today's commitments</h2>
-        {todayCommitment && <CommitmentDisplay commitment={todayCommitment} />}
+          <h2 className="text-center font-bold text-2xl">إلتزامات اليوم</h2>
+          {todayCommitment && <CommitmentDisplay commitment={todayCommitment} />}
         </div>
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <label htmlFor="datePicker" className="text-lg font-semibold text-gray-700">Select Date:</label>
+            <label htmlFor="datePicker" className="text-lg font-semibold text-gray-700">اختر التاريخ : </label>
             <DatePicker
               selected={date ? dayjs(date).toDate() : null}
               onChange={handleDateChange}
@@ -58,12 +63,12 @@ const ResponsibilitesPage = () => {
               onClick={handleClearDate}
               className="p-2 ml-3 bg-gray-200 rounded-md shadow-sm hover:bg-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Clear
+              مسح
             </button>
           </div>
 
           <Link to={"/manage-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
-            <CustomButton label={`Create ${date ? date : "Tomorrow's"} Commitments`} onClick={() => { }} />
+            <CustomButton label={`إلتزامات ${date ? date : "الغد"}`} onClick={() => { }} />
           </Link>
         </div>
 

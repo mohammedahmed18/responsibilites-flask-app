@@ -2,7 +2,7 @@ import { RessData } from "./ressTable"
 
 const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
     return (
-        <div>
+        <div className="my-7 border p-3 rounded-lg">
             {commitment.items.map((item: any, idx: number) => (
                 <div key={item.id}>
                     <p className="text-lg">{idx + 1}- {item.details}</p>
@@ -11,10 +11,10 @@ const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
                     <table className="bg-white border border-gray-300 rounded-lg shadow-lg my-4">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700"></th>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Rotba</th>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-gray-700">Name</th>
-                            </tr>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الدرجة</th>
+                                <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الإسم</th>
+                        </tr>
                         </thead>
                         <tbody>
                             {item.users.map((u: any, i: number) => {
@@ -29,6 +29,7 @@ const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
                             }
                         </tbody>
                     </table>
+                    <hr className="my-4"/>
                 </div>
             ))}
         </div>

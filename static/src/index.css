@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Tajawal";
+    src: url("assets/fonts/Tajawal-Regular.ttf") format("ttf");
+    font-weight: 300;
+
+}
+
+@font-face {
+    font-family: "Tajawal";
+    src: url("assets/fonts/Tajawal-Medium.ttf") format("ttf");
+    font-weight: 500;
+}
+
+
+@font-face {
+    font-family: "Tajawal";
+    src: url("assets/fonts/Tajawal-Bold.ttf") format("ttf");
+    font-weight: 700;
+}
+
+* {
+    font-family: "Tajawal" !important;
+}
+
+td,
+th,
+tr,
+textarea {
+    direction: rtl !important;
+}

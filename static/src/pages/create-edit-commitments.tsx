@@ -64,8 +64,8 @@ const CreateAndEditCommitment = () => {
             </>
 
             }
-            <div className="my-4">
-              <CustomButton label="add a new commitment" onClick={() => setCreatingCommitment(true)} color="green" disabled={creatingCommitment} />
+            <div className="my-4 mx-auto w-fit">
+              <CustomButton label="إضافة إلتزام جديد" onClick={() => setCreatingCommitment(true)} color="green" disabled={creatingCommitment} />
             </div>
           </>
         )
