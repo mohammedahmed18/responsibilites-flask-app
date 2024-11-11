@@ -1,12 +1,17 @@
 #!./venv/bin/python3
 
 from models import User, db
-from server import app
+from config.config import Config
+from server import get_app
+
+c = Config().dev_config
+app = get_app(c)
 
 # List of users to add
 users_to_add = [
     {'name': "mohammed ahmed", 'rotba': "gondy"},
     {'name': "GAD", 'rotba': "gondy"},
+    {'name': "محمد أحمد علي", 'rotba': "جندي"},
 ]
 
 with app.app_context():

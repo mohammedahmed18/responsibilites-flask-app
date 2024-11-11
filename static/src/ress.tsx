@@ -50,7 +50,7 @@ const ResponsibilitesPage = () => {
         </div>
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center space-x-3">
-            <label htmlFor="datePicker" className="text-lg font-semibold text-gray-700">اختر التاريخ : </label>
+            <label htmlFor="datePicker" className="text-lg mx-4 font-semibold text-gray-700">اختر التاريخ : </label>
             <DatePicker
               selected={date ? dayjs(date).toDate() : null}
               onChange={handleDateChange}

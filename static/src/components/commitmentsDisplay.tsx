@@ -3,6 +3,7 @@ import { RessData } from "./ressTable"
 const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
     return (
         <div className="my-7 border p-3 rounded-lg">
+            {!commitment.items.length && <p className="text-center py-8 text-3xl">لم يتم إضافة الإلتزامات بعد</p>}
             {commitment.items.map((item: any, idx: number) => (
                 <div key={item.id}>
                     <p className="text-lg">{idx + 1}- {item.details}</p>
