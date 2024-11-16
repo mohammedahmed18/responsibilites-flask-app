@@ -3,7 +3,7 @@ import useAsync from '../hooks/use-async'
 import { api } from '../api/api'
 import { AxiosResponse } from "axios"
 import CommitmentForm from '../components/CommitmentItemForm'
-import Layout from '../components/layout'
+import ProptectedRoute from '../protectedRoute'
 const EditCommitmentItemPage = () => {
   const params = useParams()
   const commitmentId = params.id || ""
@@ -16,7 +16,7 @@ const EditCommitmentItemPage = () => {
   const allUsers = usersRes ? ((usersRes as AxiosResponse).data) : []
   const commitmentItem = value ? (value as AxiosResponse)?.data : null
   return (
-    <Layout>
+    <ProptectedRoute role="EDITOR">
       <div>
         {loading && <span>Loading....</span>}
         {commitmentItem && <CommitmentForm
@@ -28,7 +28,7 @@ const EditCommitmentItemPage = () => {
           allUsers={allUsers}
         />}
       </div>
-    </Layout>
+    </ProptectedRoute>
   )
 }
 export default EditCommitmentItemPage

@@ -7,11 +7,11 @@ import { RessItem } from "../components/ressTable"
 import CustomButton from "../components/CustomButton"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
-import Layout from "../components/layout"
+import ProptectedRoute from "../protectedRoute"
 
 const CommitmentCounter = ({ num }: { num: number }) => {
   return (
-    <span className="font-bold block text-center bg-indigo-600 text-white rounded-2xl mx-auto w-fit px-10">{num}</span>
+    <span className="mx-auto w-fit font-bold text-center bg-indigo-600 text-white rounded-lg px-10 center">{num}</span>
   )
 }
 const CreateAndEditCommitment = () => {
@@ -25,7 +25,7 @@ const CreateAndEditCommitment = () => {
   }, [])
   const todayCommitment = value ? (value as AxiosResponse).data : null
   return (
-    <Layout>
+    <ProptectedRoute role="EDITOR">
       <div className="container mx-auto py-5 px-4">
         {loading ? "Loading..." : (
           <>
@@ -71,7 +71,8 @@ const CreateAndEditCommitment = () => {
         )
         }
       </div>
-    </Layout>
+    </ProptectedRoute>
+
   )
 }
 

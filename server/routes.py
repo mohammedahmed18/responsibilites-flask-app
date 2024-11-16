@@ -1,21 +1,25 @@
-from models import User, Responsibility, db, ResponsibilityItem, ResponsibilityUser
+from models import User, Responsibility, db, ResponsibilityItem, ResponsibilityUser,Role
 from flask import jsonify, request
 from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_tomorrow_res_url, create_new_res_item_url, get_commitment_item_by_id_url, get_res_by_date_url
 import datetime
 from sqlalchemy import desc
-
+from authentication import auth
 
 def register_users_routes(app):
     @app.route(get_all_users_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getUsers():
         users = User.query.order_by(desc(User.rotba))
         return jsonify([u.serialize for u in users])
 
 def get_date_object_from_str(date):
-    date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    return date_obj 
+    if date:
+        date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+        return date_obj 
+    return None
 def register_responsibilities_routes(app):
     @app.route(get_all_res_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getAllRes():
         date = request.args.get('date')
         date_obj = None
@@ -26,6 +30,7 @@ def register_responsibilities_routes(app):
         return jsonify([r.serialize for r in responsibilities])
 
     @app.route(get_tomorrow_res_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getTomorrow():
         # db.session.query(Responsibility).delete()
         tomorrow_date_time = datetime.date.today() + datetime.timedelta(days=1)
@@ -40,6 +45,7 @@ def register_responsibilities_routes(app):
         return tomorrow_commitment.serialize
 
     @app.route(get_res_by_date_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getCommitmentByDate(date):
         # db.session.query(Responsibility).delete()
         date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
@@ -52,6 +58,7 @@ def register_responsibilities_routes(app):
         return commitment.serialize
 
     @app.route(get_res_by_id_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getResById(res_id):
         existing_res = Responsibility.query.filter_by(id=int(res_id)).first()
         if not existing_res:
@@ -59,6 +66,7 @@ def register_responsibilities_routes(app):
         return existing_res.serialize
 
     @app.route(get_commitment_item_by_id_url, strict_slashes=False)
+    @auth.login_required(role=[Role.VIEWER.name, Role.EDITOR.name])
     def getCommitmentItemById(res_item_id):
         commitment_item = ResponsibilityItem.query.filter_by(
             id=int(res_item_id)).first()
@@ -67,6 +75,7 @@ def register_responsibilities_routes(app):
         return commitment_item.serialize
 
     @app.route(create_new_res_url, strict_slashes=False, methods=["POST"])
+    @auth.login_required(role=Role.EDITOR.name)
     def createNewRes():
         data = request.get_json(force=True)
         # parse date to python date object
@@ -77,6 +86,7 @@ def register_responsibilities_routes(app):
         return jsonify(newRes.serialize)
 
     @app.route(create_new_res_item_url, strict_slashes=False, methods=["POST", "PUT"])
+    @auth.login_required(role=Role.EDITOR.name)
     def createNewResItem():
         data = request.get_json(force=True)
         usersIds = data['users']
@@ -106,6 +116,7 @@ def register_responsibilities_routes(app):
             return jsonify(None)
 
     @app.route(delete_a_res_url, strict_slashes=False, methods=["DELETE"])
+    @auth.login_required(role=Role.EDITOR.name)
     def deleteRes(res_id):
         db.session.query(Responsibility).filter_by(id=int(res_id)).delete()
         db.session.commit()

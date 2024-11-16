@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom"
 import useAsync from "../hooks/use-async"
 import { api } from "../api/api"
 import { AxiosResponse } from "axios"
-import Layout from "../components/layout"
 import CommitmentDisplay from "../components/commitmentsDisplay"
+import ProptectedRoute from "../protectedRoute"
 
 const ShowCommitmentsPage = () => {
   const { date } = useParams()
@@ -14,7 +14,7 @@ const ShowCommitmentsPage = () => {
 
   const parentCommitment = value ? (value as AxiosResponse).data : null
   return (
-    <Layout>
+    <ProptectedRoute>
       <div className="container mx-auto py-7">
         {loading && <span>Loading...</span>}
         {
@@ -26,7 +26,7 @@ const ShowCommitmentsPage = () => {
           )
         }
       </div>
-    </Layout>
+    </ProptectedRoute>
   )
 }
 

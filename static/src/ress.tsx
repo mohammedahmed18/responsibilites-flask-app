@@ -8,8 +8,9 @@ import { AxiosResponse } from "axios";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Layout from "./components/layout";
 import CommitmentDisplay from "./components/commitmentsDisplay";
+import ProptectedRoute from "./protectedRoute";
+import { useAuth } from "./protectedRoute/authContext";
 
 export const getLocalizedType = (type: string) => {
   const typeNonCase = type.toLowerCase()
@@ -19,6 +20,7 @@ export const getLocalizedType = (type: string) => {
 }
 const ResponsibilitesPage = () => {
   const [date, setDate] = useState<string>();
+  const { user } = useAuth()
   const { loading, value: responsibilitesRes } = useAsync(() => {
     return api.get(`/res/all?date=${date || ""}`);
   }, [date]);
@@ -41,7 +43,7 @@ const ResponsibilitesPage = () => {
   const todayCommitment = todayCommitmentResponse ? (todayCommitmentResponse as AxiosResponse).data : null
 
   return (
-    <Layout>
+    <ProptectedRoute>
       <div className="container mx-auto py-5 px-4">
         {loading && <span>Loading...</span>}
         <div className="my-6 p-5 shadow-lg border rounded-lg">
@@ -66,16 +68,16 @@ const ResponsibilitesPage = () => {
               مسح
             </button>
           </div>
-
-          <Link to={"/manage-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
-            <CustomButton label={`إلتزامات ${date ? date : "الغد"}`} onClick={() => { }} />
-          </Link>
+          {user.role == "EDITOR" &&
+            <Link to={"/manage-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
+              <CustomButton label={`إلتزامات ${date ? date : "الغد"}`} onClick={() => { }} />
+            </Link>}
         </div>
 
         <RessTable data={ress} />
       </div>
-    </Layout>
+    </ProptectedRoute>
   );
 };
 
-export default ResponsibilitesPage;
+export default ResponsibilitesPage

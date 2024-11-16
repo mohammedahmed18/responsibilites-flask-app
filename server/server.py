@@ -1,16 +1,19 @@
 #!./venv/bin/python3
 
 from flask import Flask, render_template
+from flask.logging import default_handler
+from flask_cors import CORS
 from config.config import Config
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 import os
 from models import db
 from routes import register_users_routes, register_responsibilities_routes
-
+from authentication.authentication_routes import register_auth_routes
+    
 load_dotenv()
 
-def get_app(config):
+def get_app(config, withSeed=False):
     app = Flask(__name__,
                 static_url_path="",
                 static_folder="../static/dist",
@@ -27,6 +30,8 @@ def get_app(config):
     # To specify to track modifications of objects and emit signals
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = os.environ.get(
         "SQLALCHEMY_TRACK_MODIFICATIONS")
+
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
     # Flask Migrate instance to handle migrations
     migrate = Migrate(app, db)
@@ -46,15 +51,27 @@ def get_app(config):
     def index3(id):
         return render_template("index.html")
 
-
+    @app.route("/login")
+    def index4():
+        return render_template("index.html")
+    
+    if withSeed:
+        import seed
+        print("running seed")
+        seed.performSeed(app)
 
     register_users_routes(app)
     register_responsibilities_routes(app)
+    register_auth_routes(app)
+
+
+    CORS(app, resources={r"/*": {"origins": "*"}})
+
     return app
 
 if __name__ == "__main__":
     config = Config().dev_config
-    app = get_app(config)
+    app = get_app(config, withSeed=True)
     app.run(host=config.HOST,
             port=config.PORT,
             debug=config.DEBUG)

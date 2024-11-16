@@ -2,29 +2,44 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, ForeignKey
 from sqlalchemy.orm import relationship
 import enum
+from werkzeug.security import generate_password_hash, check_password_hash
 
 metadata = MetaData()
 
 db = SQLAlchemy(metadata=metadata)
 
+class Role(enum.Enum):
+    EDITOR = "EDITOR"
+    VIEWER = "VIEWER"
+    Admin  = "Admin"
 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(250), nullable=False)
     rotba = db.Column(db.String(250), nullable=False)
+    username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(250), nullable=False, default="123456")
+    role = db.Column(db.Enum(Role), default=Role.VIEWER)
 
     @property
     def serialize(self):
         return {
             'id': self.id,
+            'username': self.username,
             'name': self.name,
-            'rotba': self.rotba
+            'rotba': self.rotba,
+            'role': self.role.name if self.role is not None else None,
         }
 
     def __repr__(self):
         return f'<User {self.id}, {self.name}, {self.rotba}>'
+   # @password.setter
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class ResponsibilityType(enum.Enum):

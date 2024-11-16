@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { api } from '../api/api';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { MultiSelect } from '@mantine/core';
 
 type CommitmentFormProps = {
   initialData?: CommitmentFormData;
@@ -46,9 +49,8 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
 
   };
 
-  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedUsers = Array.from(e.target.selectedOptions, (option) => option.value);
-    setUsers(selectedUsers);
+  const handleUserChange = (selectedUserIds: string[]) => {
+    setUsers(selectedUserIds);
   };
 
   return (
@@ -59,14 +61,20 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
         {/* Commitment Details */}
         <div className="mb-6">
           <label htmlFor="details" className="block text-sm font-medium text-gray-700">تفاصيل الإلتزام</label>
-          <textarea
+          <ReactQuill
             id="details"
-            name="details"
+            theme="snow"
+            value={details}
+            onChange={(value) => setDetails(value)}
+            className='h-[150px] mb-[70px] mt-2'
+            style={{ direction: "rtl" }}
+          />
+
+          {/* <textarea
             rows={4}
             value={details}
-            onChange={(e) => setDetails(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-          />
+          /> */}
         </div>
 
         {/* Commitment Notes */}
@@ -114,8 +122,8 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
 
         {/* Users */}
         <div className="mb-6">
-          <label htmlFor="users" className="block text-sm font-medium text-gray-700">الأفراد المعينين</label>
-          <select
+          <label htmlFor="users" className="block text-sm font-medium text-gray-700">الأفراد المعنيين</label>
+          {/* <select
             id="users"
             name="users"
             multiple
@@ -128,7 +136,15 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
                 <option key={u.id} value={u.id}>{u.rotba + "\/" + u.name} </option>
               ))
             }
-          </select>
+          </select> */}
+          <MultiSelect
+            data={allUsers.map(({ id, name, rotba }) => ({ label: rotba + "\/" + name, value: id.toString() }))}
+            value={users}
+            onChange={handleUserChange}
+            name='users'
+            id='users'
+            searchable
+          />
         </div>
 
         {/* Submit Button */}

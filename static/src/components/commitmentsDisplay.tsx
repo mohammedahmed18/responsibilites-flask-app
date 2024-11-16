@@ -1,12 +1,20 @@
+import ReactQuill from "react-quill"
 import { RessData } from "./ressTable"
+import 'react-quill/dist/quill.bubble.css';
 
-const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
+const CommitmentDisplay = ({ commitment }: { commitment: RessData }) => {
     return (
         <div className="my-7 border p-3 rounded-lg">
             {!commitment.items.length && <p className="text-center py-8 text-3xl">لم يتم إضافة الإلتزامات بعد</p>}
             {commitment.items.map((item: any, idx: number) => (
                 <div key={item.id}>
-                    <p className="text-lg">{idx + 1}- {item.details}</p>
+                    <p className="text-lg">{idx + 1}-
+                        <ReactQuill
+                            value={item.details}
+                            readOnly={true}
+                            theme={"bubble"}
+                        />
+                    </p>
                     <span className="text-gray-600">{item.notes}</span>
 
                     <table className="bg-white border border-gray-300 rounded-lg shadow-lg my-4">
@@ -15,7 +23,7 @@ const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
                                 <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
                                 <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الدرجة</th>
                                 <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700">الإسم</th>
-                        </tr>
+                            </tr>
                         </thead>
                         <tbody>
                             {item.users.map((u: any, i: number) => {
@@ -30,7 +38,7 @@ const CommitmentDisplay = ({ commitment }: {commitment: RessData}) => {
                             }
                         </tbody>
                     </table>
-                    <hr className="my-4"/>
+                    <hr className="my-4" />
                 </div>
             ))}
         </div>

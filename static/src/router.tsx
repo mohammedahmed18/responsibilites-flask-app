@@ -3,29 +3,40 @@ import ResponsibilitesPage from "./ress"
 import CreateAndEditCommitment from "./pages/create-edit-commitments"
 import EditCommitmentItemPage from "./pages/edit-commitment-item"
 import ShowCommitmentsPage from "./pages/show-commitments-page"
+import LoginPage from "./pages/login"
+import Layout from "./components/layout"
+import ProfilePage from "./pages/profile"
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ResponsibilitesPage />,
+    element: <Layout><ResponsibilitesPage /></Layout>,
+  },
+  {
+    path: "/profile",
+    element: <Layout><ProfilePage /></Layout>
+  },
+  {
+    path: "/login",
+    element: <Layout><LoginPage /></Layout>,
   },
   {
     path: "/manage-commitments/:date",
-    element: <CreateAndEditCommitment />,
+    element: <Layout><CreateAndEditCommitment /></Layout>,
   },
   {
     path: "/commitments/:date",
-    element: <ShowCommitmentsPage />,
+    element: <Layout> <ShowCommitmentsPage /></Layout>,
   },
   {
     path: "/edit-commitment-item/:id",
-    element: <EditCommitmentItemPage />,
-  },
+    element: <Layout> <EditCommitmentItemPage /></Layout>,
+  }
 ])
 
 
-export default function() {
+export default function () {
   return (
     <RouterProvider router={router} />
   )
