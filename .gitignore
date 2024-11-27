@@ -2,6 +2,6 @@ __pycache__/
 .env
 server/site.db
 node_modules/
-dist/
+# dist/
 
-server/venv/
+# server/venv/
