@@ -1,17 +1,48 @@
 from models import User, Responsibility, db, ResponsibilityItem, ResponsibilityUser,Role
 from flask import jsonify, request
-from urls import get_all_res_url, get_all_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_tomorrow_res_url, create_new_res_item_url, get_commitment_item_by_id_url, get_res_by_date_url
+from urls import get_all_res_url, base_users_url, get_res_by_id_url, create_new_res_url, delete_a_res_url, get_tomorrow_res_url, create_new_res_item_url, get_commitment_item_by_id_url, get_res_by_date_url,single_user_url
 import datetime
 from sqlalchemy import desc
 from authentication import auth
 from authentication.roles import get_roles_chain
 
 def register_users_routes(app):
-    @app.route(get_all_users_url, strict_slashes=False)
-    @auth.login_required(role=get_roles_chain(Role.VIEWER))
+    @app.route(base_users_url, strict_slashes=False)
+    @auth.login_required(role=get_roles_chain(Role.ADMIN))
     def getUsers():
         users = User.query.order_by(desc(User.rotba))
         return jsonify([u.serialize for u in users])
+    @app.route(base_users_url, strict_slashes=False, methods=["POST"])
+    @auth.login_required(role=get_roles_chain(Role.ADMIN))
+    def create_user():
+        data = request.get_json(force=True)
+        existingUsername = User.query.filter_by(username=data["username"]).first()
+        if existingUsername:
+            return jsonify(message="username already exist"), 401
+        # parse date to python date object
+        newUser = User(
+            name = data["name"],
+            rotba = data["rotba"],
+            username = data["username"],
+            role = data["role"],
+        )
+        newUser.set_password(data["password"])
+        db.session.add(newUser)
+        db.session.commit()
+        return jsonify(newUser.serialize)
+    @app.route(single_user_url, strict_slashes=False, methods=["PUT"])
+    @auth.login_required(role=get_roles_chain(Role.ADMIN))
+    def update_user(user_id):
+        data = request.get_json(force=True)
+        existingUsername = User.query.filter(User.username == data["username"], User.id != user_id).first()
+        if existingUsername:
+            return jsonify(message="username already exist"), 401
+        user_query = User.query.filter_by(id=user_id)
+        user_query.update(dict(data))
+        db.session.commit()
+        user = user_query.first()
+        return jsonify(user.serialize)
+        
 
 def get_date_object_from_str(date):
     if date:

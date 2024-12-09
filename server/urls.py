@@ -1,7 +1,8 @@
 base_api_url = "/api/v1"
 
 # users api
-get_all_users_url = f"{base_api_url}/users"
+base_users_url = f"{base_api_url}/users"
+single_user_url = f"{base_users_url}/<user_id>"
 
 
 # responsibilities routes

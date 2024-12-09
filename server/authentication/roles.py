@@ -2,7 +2,7 @@ from models import Role
 
 # the first role in the array is having the heighest privellages
 roles_in_order = [
-    Role.Admin,
+    Role.ADMIN,
     Role.EDITOR,
     Role.VIEWER
 ]

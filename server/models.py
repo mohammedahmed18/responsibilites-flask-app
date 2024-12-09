@@ -11,7 +11,7 @@ db = SQLAlchemy(metadata=metadata)
 class Role(enum.Enum):
     EDITOR = "EDITOR"
     VIEWER = "VIEWER"
-    Admin  = "Admin"
+    ADMIN  = "ADMIN"
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -19,7 +19,7 @@ class User(db.Model):
     name = db.Column(db.String(250), nullable=False)
     rotba = db.Column(db.String(250), nullable=False)
     username = db.Column(db.String(64), index=True, unique=True)
-    password = db.Column(db.String(250), nullable=False, default="123456")
+    password = db.Column(db.String(250), nullable=False, default="secret")
     role = db.Column(db.Enum(Role), default=Role.VIEWER)
 
     @property

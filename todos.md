@@ -4,8 +4,8 @@
 - [x] create a navbar to easily navigate to homepage
 - [x] arabic localization
 
-- [] ability for Role `Admin` to add new users
+- [x] ability for Role `Admin` to add new users
 - [x] change current user password
-- [] view all commitments in one page
+- [x] view all commitments in one page
 
 - [] Refactor the codebase (variable names -- make sure to use pyton naming convention -- , organize folder and packages )

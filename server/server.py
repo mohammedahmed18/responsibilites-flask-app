@@ -41,18 +41,18 @@ def get_app(config, withSeed=False):
     @app.route("/")
     def index():
         return render_template("index.html")
-
     @app.route("/manage-commitments/<date>", strict_slashes=False)
     @app.route("/commitments/<date>", strict_slashes=False)
     def index2(date):
         return render_template("index.html")
-
     @app.route("/edit-commitment-item/<id>", strict_slashes=False)
     def index3(id):
         return render_template("index.html")
-
     @app.route("/login")
     def index4():
+        return render_template("index.html")
+    @app.route("/users")
+    def index5():
         return render_template("index.html")
     
     if withSeed:

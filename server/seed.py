@@ -2,7 +2,9 @@ from models import User, db
 
 # List of users to add
 users_to_add = [
-    {'name': "محمد ابراهيم", 'rotba': "نقيب", 'username': "m.ibrahim", 'password': "123456", 'role': "EDITOR"},
+    {'name': "محمد ابراهيم", 'rotba': "نقيب", 'username': "m.ibrahim", 'password': "123456", 'role': "VIEWER"},
+    {'name': "محمد ابراهيم", 'rotba': "نقيب", 'username': "admin", 'password': "123456", 'role': "ADMIN"},
+    {'name': "أرشيف", 'rotba': "جندي", 'username': "archive", 'password': "123456", 'role': "EDITOR"},
 ]
 
 def performSeed(app):
