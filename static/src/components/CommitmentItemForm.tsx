@@ -69,26 +69,21 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ initialData, allUsers, 
             className='h-[150px] mb-[70px] mt-2'
             style={{ direction: "rtl" }}
           />
-
-          {/* <textarea
-            rows={4}
-            value={details}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-          /> */}
         </div>
 
-        {/* Commitment Notes */}
         <div className="mb-6">
           <label htmlFor="notes" className="block text-sm font-medium text-gray-700">ملاحظات</label>
-          <textarea
+          <span className='text-gray-600/70'>(مثل رقم الجواب أو رابط إلى الصورة الملحقة بالفاكس)</span>
+          <ReactQuill
             id="notes"
-            name="notes"
-            rows={4}
+            theme="snow"
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+            onChange={(value) => setNotes(value)}
+            className='h-[150px] mb-[70px] mt-2'
+            style={{ direction: "rtl" }}
           />
         </div>
+
 
         {/* Commitment Type */}
         <div className="mb-6">

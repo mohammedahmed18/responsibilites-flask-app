@@ -30,7 +30,7 @@ const CreateAndEditCommitment = () => {
         {loading ? "Loading..." : (
           <>
             <div className="border-b pb-4 mb-6">
-              <h2 className="text-2xl font-semibold text-gray-800">{dayjs(todayCommitment.date).format("YYYY-MM-DD")}</h2>
+              <h2 className="text-2xl font-semibold text-gray-800">{dayjs(todayCommitment.date).format("dddd YYYY-MM-DD").replaceEnglishDays()}</h2>
             </div>
 
             {todayCommitment?.items?.map((i: RessItem, idx: number) => (

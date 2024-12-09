@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useAuth } from "./authContext"
 import { useNavigate } from "react-router-dom"
+import { SingleRoleType } from "../utils/roles"
 
 type Props = {
   children: React.ReactNode
-  role? : "EDITOR" | "VIEWER" | "ADMIN"
+  role? : SingleRoleType
 }
 function ProptectedRoute({ children, role }: Props) {
   const { isAnonymous, loading, user } = useAuth()

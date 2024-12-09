@@ -6,18 +6,30 @@ const CommitmentDisplay = ({ commitment }: { commitment: RessData }) => {
     return (
         <div className="my-7 border p-3 rounded-lg">
             {!commitment.items.length && <p className="text-center py-8 text-3xl">لم يتم إضافة الإلتزامات بعد</p>}
-            {commitment.items.map((item: any, idx: number) => (
+            {commitment.items.map((item: any, idx: number) => {return (
                 <div key={item.id}>
-                    <p className="text-lg">{idx + 1}-
+                    <div className="text-xl flex gap-2">
+                        <span className="flex-shrink-0">{(idx + 1).toString().toArDigits() + " "}-</span>
                         <ReactQuill
                             value={item.details}
                             readOnly={true}
                             theme={"bubble"}
                         />
-                    </p>
-                    <span className="text-gray-600">{item.notes}</span>
-
-                    <table className="bg-white border border-gray-300 rounded-lg shadow-lg my-4">
+                    </div>
+                    {<p className="text-md">
+                        <ReactQuill
+                            value={item.notes}
+                            readOnly={true}
+                            theme={"bubble"}
+                        />
+                    </p>}
+                    <div className="flex item-center gap-4">
+                        <span className="font-bold">الأفراد المعنيين</span>
+                        {item.users.map((u: any) => {
+                            return <span className="text-indigo-700" key={u.id}>{u.rotba + "\/" + u.name}</span>
+                        })}
+                    </div>
+                    {/* <table className="bg-white border border-gray-300 rounded-lg shadow-lg my-4">
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="py-2 px-4 text-right text-sm font-semibold text-gray-700"></th>
@@ -37,10 +49,10 @@ const CommitmentDisplay = ({ commitment }: { commitment: RessData }) => {
                             })
                             }
                         </tbody>
-                    </table>
+                    </table> */}
                     <hr className="my-4" />
                 </div>
-            ))}
+            )})}
         </div>
     )
 }

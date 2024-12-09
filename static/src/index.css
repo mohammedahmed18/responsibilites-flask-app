@@ -26,7 +26,8 @@ textarea {
 .ql-editor {
     direction: rtl !important;
     text-align: right !important;
-    font-size: 110%;
+    font-size: 140%;
+    padding: 0 !important;
 }
   
 .ql-picker-label::before {
@@ -41,4 +42,20 @@ textarea {
 }
 .mantine-MultiSelect-inputField:focus {
     outline: none !important;
+}
+.mantine-Notifications-root{
+    z-index: 999999999999 !important;
+}
+
+
+.table tbody td,
+.table thead th {
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    text-align: center !important;
+}
+.table th div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

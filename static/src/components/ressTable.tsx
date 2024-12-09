@@ -48,19 +48,26 @@ const RessTable = ({ data }: { data: RessData[] }) => {
               <tr key={event.id + "." + item.id} className="border-t">
                 <td className="py-2 px-4 text-sm text-gray-600">
                   <Link to={`/commitments/${formattedDate}`} className="underline hover:text-blue-600">
-                    {formattedDate}
+                    {dayjs(event.date).format("dddd YYYY-MM-DD").replaceEnglishDays()}
                   </Link>
                 </td>
                 <td className="py-2 px-4 text-sm text-gray-600">{getLocalizedType(item.type)}</td>
                 <td className="py-2 px-4 text-sm text-gray-600">
-                {/* {truncate(200, item.details,)} */}
-                <ReactQuill
-                            value={item.details}
-                            readOnly={true}
-                            theme={"bubble"}
-                        />
+                  {/* {truncate(200, item.details,)} */}
+                  <ReactQuill
+                    value={truncate(100, item.details)}
+                    readOnly={true}
+                    theme={"bubble"}
+                  />
                 </td>
-                <td className="py-2 px-4 text-sm text-gray-600">{truncate(200, item.notes)}</td>
+
+                <td className="py-2 px-4 text-sm text-gray-600">
+                  <ReactQuill
+                    value={truncate(100, item.notes)}
+                    readOnly={true}
+                    theme={"bubble"}
+                  />
+                </td>
                 <td className="py-2 px-4 text-sm text-gray-600">
                   {item.users.map((u => (
                     <span key={u.id} className="block">{u.rotba + "\/" + u.name}</span>

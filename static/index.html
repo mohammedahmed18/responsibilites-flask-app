@@ -1,12 +1,44 @@
 <!doctype html>
 <html lang="en" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>إلتزامات الوحدة</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إلتزامات الوحدة</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    String.prototype.toArDigits = function () {
+      var id = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+      return this.replace(/[0-9]/g, function (w) {
+        return id[+w]
+      });
+    }
+
+    String.prototype.replaceEnglishDays = function() {
+      let cloneText = this.split().join()
+      const englishDays = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+      ];
+
+      const arabicDays = [
+        'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'
+      ];
+
+      // Replace English days in the date string with Arabic days
+      englishDays.forEach((day, index) => {
+        const regex = new RegExp(day, 'g');  // Create a regular expression for each English day
+        cloneText = cloneText.replace(regex, arabicDays[index]);
+      });
+
+      return cloneText;
+    }
+
+
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

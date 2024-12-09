@@ -6,6 +6,7 @@ import ShowCommitmentsPage from "./pages/show-commitments-page"
 import LoginPage from "./pages/login"
 import Layout from "./components/layout"
 import ProfilePage from "./pages/profile"
+import UsersPage from "./pages/users"
 
 
 const router = createBrowserRouter([
@@ -32,7 +33,12 @@ const router = createBrowserRouter([
   {
     path: "/edit-commitment-item/:id",
     element: <Layout> <EditCommitmentItemPage /></Layout>,
+  },
+  {
+    path: "/users",
+    element: <Layout><UsersPage /></Layout>,
   }
+
 ])
 
 

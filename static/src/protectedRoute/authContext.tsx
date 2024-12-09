@@ -10,6 +10,7 @@ import {
 import { api } from '../api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
+import { AppRole } from '../utils/roles';
 
 
 // export type AdminType =
@@ -19,9 +20,11 @@ export type User = {
     name?: string;
     rotba?: string;
     username?: string;
-    role?: "EDITOR" | "VIEWER" | "ADMIN";
+    role?: keyof typeof AppRole;
     isAnonymous: boolean
 };
+
+export type UserWithEdit = Omit<User, "isAnonymous"> & {password?: string};
 
 const defaultUser: User = {
     isAnonymous: true

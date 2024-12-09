@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../protectedRoute/authContext";
 import Transition from "./Transition";
+import { AppRole } from "../utils/roles";
 
 const Navbar = () => {
     const { logout, user, isAnonymous } = useAuth();
@@ -94,7 +95,7 @@ const Navbar = () => {
                                     {isAnonymous ? "زائر" : user?.name || "المستخدم"}
                                 </div>
                                 <div className="text-xs text-gray-400 italic">
-                                    {isAnonymous ? "" : user.role == "EDITOR" ? "أدمن" : "مستخدم"}
+                                    {isAnonymous ? "" : user.role == "ADMIN" ? "أدمن" : user.role == "EDITOR"? "مُعدل": "مستخدم"}
                                 </div>
                             </div>
 
@@ -110,7 +111,15 @@ const Navbar = () => {
                                                 الصفحة الشخصية
                                             </Link>
                                         </li>
-                                        <li>
+                                        {user.role == AppRole.ADMIN && 
+                                         <li>
+                                         <Link
+                                             to={"/users"}
+                                             className="font-medium text-sm text-violet-400 flex items-center py-1 px-3"
+                                         >المستخدمين</Link>
+                                     </li>
+                                        }
+                                        <li className="mt-7">
                                             <button
                                                 onClick={logout}
                                                 className="font-medium text-sm text-violet-400 flex items-center py-1 px-3"

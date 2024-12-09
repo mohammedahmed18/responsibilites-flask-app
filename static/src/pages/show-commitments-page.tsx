@@ -20,7 +20,7 @@ const ShowCommitmentsPage = () => {
         {
           parentCommitment && (
             <div>
-              <h2 className="text-center font-bold text-3xl">{dayjs(parentCommitment.date).format("YYYY-MM-DD")}</h2>
+              <h2 className="text-center font-bold text-3xl">{dayjs(parentCommitment.date).format("dddd YYYY-MM-DD").replaceEnglishDays()}</h2>
               <CommitmentDisplay commitment={parentCommitment} />
             </div>
           )
