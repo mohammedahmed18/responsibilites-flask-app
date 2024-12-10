@@ -21,7 +21,7 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(250), nullable=False, default="secret")
     role = db.Column(db.Enum(Role), default=Role.VIEWER)
-
+    enabled = db.Column(db.Boolean, unique=False, default=False)
     @property
     def serialize(self):
         return {
@@ -30,6 +30,7 @@ class User(db.Model):
             'name': self.name,
             'rotba': self.rotba,
             'role': self.role.name if self.role is not None else None,
+            'enabled': True if self.enabled is None else self.enabled,
         }
 
     def __repr__(self):

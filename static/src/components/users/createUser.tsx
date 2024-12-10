@@ -45,7 +45,7 @@ const CreateUser = ({
                 className="modal cursor-pointer"
                 tabIndex={-1}
             >
-                <label className="modal-box relative w-11/12 max-w-5xl">
+                <label className="modal-box relative w-11/12 max-w-5xl h-[500px]">
                     <UserForm
                         onUserCreated={handleAddUser}
                         onUserEdited={handleEditUser}

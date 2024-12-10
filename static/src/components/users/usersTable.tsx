@@ -1,4 +1,4 @@
-import { Avatar, Button, Loader, Table } from "@mantine/core";
+import { Avatar, Button, CheckIcon, Loader, Table } from "@mantine/core";
 import { useAuth, User } from "../../protectedRoute/authContext";
 
 const actionGhostBtnClassName =
@@ -51,6 +51,15 @@ const UsersTable = ({
         }
         return null;
     };
+    const enabledTemplate = (rowData: User) => {
+        if (rowData.enabled) {
+            return <span className="badge badge-neutral">enabled</span>;
+        }
+        else {
+            return <span className="badge badge-ghost">disabled</span>;
+        }
+        return null;
+    };
     return (
         <>
             <>
@@ -65,7 +74,8 @@ const UsersTable = ({
                                 <th>اسم المستخدم</th>
                                 {!!onEditClick && <th>تعديل</th>}
                                 {!!onResetUserPasswordClicked && <th>تغيير كلمة السر</th>}
-                                <th>Role</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,6 +101,7 @@ const UsersTable = ({
                                         </td>
                                     )}
                                     <td>{roleTemplate(rowData)}</td>
+                                    <td>{enabledTemplate(rowData)}</td>
                                 </tr>
                             ))}
                         </tbody>

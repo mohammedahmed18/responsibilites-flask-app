@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useAuth } from "./authContext"
 import { useNavigate } from "react-router-dom"
-import { SingleRoleType } from "../utils/roles"
+import { hasAccess, SingleRoleType } from "../utils/roles"
 
 type Props = {
   children: React.ReactNode
@@ -17,7 +17,7 @@ function ProptectedRoute({ children, role }: Props) {
       navigate("/login")
     }
     // user is authenticated
-    if (role && user.role != role) {
+    if (role && !hasAccess(user, role)) {
       // navigate to homepage
       navigate("/")
     }

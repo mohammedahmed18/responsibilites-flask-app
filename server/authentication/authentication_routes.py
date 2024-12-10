@@ -23,9 +23,11 @@ def register_auth_routes(app):
         return auth.current_user()
 
     @app.route(base_api_url+'/auth/login', strict_slashes=False,methods=["POST"])
-    def logout():
+    def login():
         data = request.get_json(force=True)
-        authenticated = auth_service.verify_password(data['username'], data['password'])
+        authenticated, user = auth_service.verify_password(data['username'], data['password'])
+        if user and not user.enabled:
+            return jsonify(message= "User is not allowed to login"),403
         if authenticated:
             token = auth_service.generate_auth_token()
             return jsonify(token=token, user= g.user.serialize)
@@ -33,7 +35,7 @@ def register_auth_routes(app):
     
     @auth.login_required
     @app.route(base_api_url+'/auth/logout', strict_slashes=False,methods=["DELETE"])
-    def login():
+    def logout():
         g.user = None
         return jsonify(True),200
     

@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import CommitmentDisplay from "./components/commitmentsDisplay";
 import ProptectedRoute from "./protectedRoute";
 import { useAuth } from "./protectedRoute/authContext";
+import { hasAccess } from "./utils/roles";
 
 export const getLocalizedType = (type: string) => {
   const typeNonCase = type.toLowerCase()
@@ -68,13 +69,13 @@ const ResponsibilitesPage = () => {
               مسح
             </button>
           </div>
-          {user.role == "EDITOR" &&
+          {hasAccess(user, "EDITOR") &&
             <Link to={"/manage-commitments/" + (date || dayjs().add(1, "day").format("YYYY-MM-DD"))}>
               <CustomButton label={`إلتزامات ${date ? date : "الغد"}`} onClick={() => { }} />
             </Link>}
         </div>
 
-        <RessTable data={ress} />
+        <RessTable mode="manage" data={ress} />
       </div>
     </ProptectedRoute>
   );

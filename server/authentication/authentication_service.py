@@ -40,17 +40,17 @@ def verify_password(username_or_token, password):
         if not user or not user.verify_password(password):
             if(user):
                 current_app.logger.error("message: \"login failed\", reason: \"incorrect password\", username: \"{}\", ip: \"{}\"".format(user.username, request.remote_addr))
-                return False
+                return False, user
             else:
                 current_app.logger.error("message: \"login failed\", reason: \"incorrect username/{}\", ip: \"{}\"".format(message, request.remote_addr))
-            return False
+            return False, user
     g.user = user
     # If session times out, this prints the token
     if not verified_by_token:
         current_app.logger.info("message: \"login successful\", username: \"{}\", ip: \"{}\"".format(user.username, request.remote_addr))
     else:
         current_app.logger.info("message: \"logged in with token\", ip: \"{}\"".format(request.remote_addr))
-    return True
+    return True, user
 
 
 #

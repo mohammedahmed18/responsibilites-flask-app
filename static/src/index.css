@@ -51,7 +51,7 @@ textarea {
 .table tbody td,
 .table thead th {
     vertical-align: middle;
-    border: 1px solid #dddddd;
+    border: 1px solid #d3d3d3;
     text-align: center !important;
 }
 .table th div {

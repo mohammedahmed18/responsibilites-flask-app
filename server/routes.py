@@ -8,7 +8,7 @@ from authentication.roles import get_roles_chain
 
 def register_users_routes(app):
     @app.route(base_users_url, strict_slashes=False)
-    @auth.login_required(role=get_roles_chain(Role.ADMIN))
+    @auth.login_required(role=get_roles_chain(Role.VIEWER))
     def getUsers():
         users = User.query.order_by(desc(User.rotba))
         return jsonify([u.serialize for u in users])

@@ -5,7 +5,7 @@ import { AppRole, SingleRoleType } from "../../utils/roles";
 import useAsync from "../../hooks/use-async";
 import { api } from "../../api/api";
 import { notifications } from "@mantine/notifications";
-import { Loader } from "@mantine/core";
+import { Loader, Switch } from "@mantine/core";
 import Select from "react-select";
 
 const defaultValues: UserWithEdit = {
@@ -13,7 +13,8 @@ const defaultValues: UserWithEdit = {
     username: "",
     password: "",
     rotba: "",
-    role: "VIEWER"
+    role: "VIEWER",
+    enabled: false
 };
 
 type Props = {
@@ -116,14 +117,14 @@ const UserForm = ({
         });
     };
 
-    const handleSetInputData = (key: keyof UserWithEdit, value: string) => {
+    const handleSetInputData = (key: keyof UserWithEdit, value: any) => {
         const clone = Object.assign({}, inputData);
         clone[key] = value;
         setInputData(clone);
     };
 
     return (
-        <form onSubmit={handleSumbit}>
+        <form onSubmit={handleSumbit} className="flex flex-col justify-between h-full">
             <div className="form-control">
                 <label className="label">
                     <span className="label-text">
@@ -156,8 +157,9 @@ const UserForm = ({
                             required
                             placeholder=""
                             className="outline-none w-full"
-                            isSearchable
                             tabIndex={0}
+                            isSearchable={false}
+                            isClearable={false}
                             value={{
                                 label: inputData.rotba,
                                 value: inputData.rotba,
@@ -175,8 +177,12 @@ const UserForm = ({
                                     value: "صف ظابط",
                                 },
                                 {
-                                    label: "ظابط",
-                                    value: "ظابط",
+                                    label: "ملازم",
+                                    value: "ملازم"
+                                },
+                                {
+                                    label: "ملازم أول",
+                                    value: "ملازم أول",
                                 },
                                 {
                                     label: "نقيب",
@@ -312,7 +318,12 @@ const UserForm = ({
                     </div>
                 </label>
             </div> */}
-
+            <Switch
+                checked={inputData.enabled}
+                onChange={(e) => handleSetInputData("enabled", e.target.checked)}
+                label="مسموح بالدخول"
+                className="flex-row-reverse"
+            />
             <div className="form-control mt-6">
                 <button
                     type="submit"

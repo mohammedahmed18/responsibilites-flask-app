@@ -11,6 +11,7 @@ import { api } from '../api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { AppRole } from '../utils/roles';
+import { AxiosError } from 'axios';
 
 
 // export type AdminType =
@@ -21,13 +22,14 @@ export type User = {
     rotba?: string;
     username?: string;
     role?: keyof typeof AppRole;
+    enabled?: boolean
     isAnonymous: boolean
 };
 
 export type UserWithEdit = Omit<User, "isAnonymous"> & {password?: string};
 
 const defaultUser: User = {
-    isAnonymous: true
+    isAnonymous: true,
 };
 
 type ContextType = {
@@ -104,7 +106,7 @@ export const AuthProvider = ({ children }: props) => {
             };
         }catch (err) {
             notifications.show({
-                message: 'اسم المستخدم أو كلمة السر غير صحيحة',
+                message: (err as AxiosError)?.response?.data?.message || 'اسم المستخدم أو كلمة السر غير صحيحة',
                 color: "red"
             });
         }
