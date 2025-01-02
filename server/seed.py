@@ -22,6 +22,7 @@ def performSeed(app):
                     rotba=user_data['rotba'],
                     username=user_data['username'],
                     role=user_data['role'],
+                    enabled=True
                 )
                 new_user.set_password(user_data['password'])
                 db.session.add(new_user)

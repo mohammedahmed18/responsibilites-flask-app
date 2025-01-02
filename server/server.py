@@ -1,5 +1,3 @@
-#!./venv/bin/python3
-
 from flask import Flask, render_template
 from flask.logging import default_handler
 from flask_cors import CORS
