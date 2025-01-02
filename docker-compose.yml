@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  eltzamat:
+    image: mohammed180/eltzamat
+    container_name: eltzamat
+    ports:
+      - "80:5000" 
+    volumes:
+      - ./app-data:/app/server/app-data
+    restart: always
+    environment:
+      - SECRET_KEY=secret

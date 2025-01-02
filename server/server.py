@@ -21,7 +21,7 @@ def get_app(config, withSeed=False):
     app.env = config.ENV
 
     basedir = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'site.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir,"app-data", 'site.db')
     # Path for our local sql lite database
     app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 

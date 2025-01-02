@@ -14,11 +14,14 @@ RUN yarn vite build
 FROM python:3.12-alpine
 
 COPY ./server/requirements.txt /app/server/requirements.txt
+
+WORKDIR /app/server
+
 RUN pip install -r requirements.txt
 
 COPY ./server/ /app/server/
-
-WORKDIR /app/server
+RUN mkdir app-data && touch app-data/site.db
+VOLUME [ "/app/server/app-data" ]
 
 COPY --from=builder /app/dist/ /app/static/dist/
 
