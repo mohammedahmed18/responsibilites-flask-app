@@ -4,6 +4,21 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { MultiSelect } from '@mantine/core';
 
+import Quill from 'quill'
+try {
+  const Link = Quill.import('formats/link');
+  Link.sanitize = function (url: string) {
+    console.log(url)
+    // quill by default creates relative links if scheme is missing.
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return `http://${url}`
+    }
+    return url;
+  }
+} catch (e) {
+  console.log(e);
+}
+
 type CommitmentFormProps = {
   initialData?: CommitmentFormData;
   allUsers: { id: number, name: string, rotba: string }[]
